@@ -3,8 +3,15 @@ import { Link, useHistory } from 'react-router-dom';
 import { AUTH_TOKEN } from '../contants';
 
 const authToken = localStorage.getItem(AUTH_TOKEN);
-
 const Header = () => {
+  const [logged, setLogged] = React.useState(false);
+  React.useEffect(() => {
+    if (authToken) {
+      setLogged(true);
+    } else {
+      setLogged(false);
+    }
+  }, []);
   const history = useHistory();
   return (
     <div className="flex pa1 justify-between nowrap orange">
@@ -13,7 +20,7 @@ const Header = () => {
         <Link to="/" className="ml1 no-underline black">
           new
         </Link>
-        {authToken && (
+        {logged && (
           <div className="flex">
             <div className="ml1">|</div>
             <Link to="/create" className="ml1 no-underline black">
@@ -23,12 +30,12 @@ const Header = () => {
         )}
       </div>
       <div className="flex flex-fixed">
-        {authToken ? (
+        {logged ? (
           <div
             className="ml1 pointer black"
             onClick={() => {
               localStorage.removeItem(AUTH_TOKEN);
-              history.push(`/`);
+              history.push(`/login`);
             }}
           >
             logout
